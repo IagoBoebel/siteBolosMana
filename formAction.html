@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Bolos Deliciosos</title>
+        <link rel="stylesheet" href="styles.css" />
+        <script>
+            /* Função para tratar os dados */
+            function mostrarDados() {
+                /* Recupera os dados da url */
+                let dadosURL = window.location.search;
+                /* Cria um novo objeto contendo os paramentros dos dados recuperados */
+                let dados = new URLSearchParams(dadosURL);
+                /* Coloca cada dados do formulario em variavel especifica */
+                let retirada = dados.get('retirada');
+                let cep = dados.get('endereco');
+                let telefone = dados.get('telefone'); 
+                let nome = dados.get('nome');
+                let sabor = dados.get('sabor');
+                /* Adiciona as variavés(dados recuperados) na pagina através de id's */
+                document.getElementById('nomePedido').textContent = nome;
+                document.getElementById('saborPedido').textContent = sabor;
+                document.getElementById('cepPedido').textContent = cep;
+                document.getElementById('telefonePedido').textContent = telefone;
+                document.getElementById('retiradaPedido').textContent = retirada;
+            }
+            /* Faz com que a função para tratar os dados seja chamada assim que a pagina carrega pela primeira vez */
+            window.onload = mostrarDados;
+        </script>
+    </head>
+    <body>
+        <header class="capa">
+            <div class="logo">
+                <h1>Bolos Deliciosos</h1>
+                <h2>Os melhores sabores feitos com amor e tradição</h2>
+            </div>
+        </header>
+        <nav class="navegacao">
+            <ul>
+                <li>
+                    <a href="index.html">Início</a>
+                </li>
+                <li>
+                    <a href="form.html">Pedidos</a>
+                </li>
+                <li>
+                    <a href="sobre.html">Sobre</a>
+                </li>
+            </ul>
+        </nav>
+
+        <section class="conteudo">
+            <h1>Confirmação de Pedido</h1>
+            <p><strong>Nome:</strong> <span id="nomePedido"></span></p>
+            <p><strong>Sabor do Bolo:</strong> <span id="saborPedido"></span></p>
+            <p><strong>Telefone:</strong> <span id="telefonePedido"></span></p>
+            <p><strong>Retirada:</strong> <span id="retiradaPedido"></span></p>
+            <p><strong>Endereço:</strong> <span id="cepPedido"></span></p>
+        </section>
+    </body>
+</html>

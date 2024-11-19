@@ -1,0 +1,81 @@
+/* Zerando definições padrões de browser */
+* {
+    padding: 0;
+    margin: 0;
+}
+/* Configurando cor de plano de fundo do site */
+body {
+    background-color: #AECBEA; 
+}
+/* Configuração do fundo da capa e do tamanho */
+.capa {
+    background-color: #0A2A43;
+    width: 100%;
+    height: 200px;   
+}
+/* Classe para o texto da capa */
+.capa h1 {
+    box-shadow: 0 4px 8px #00000033; /* Shadow box para criar um leve efeito de destaque */
+    color: saddlebrown;
+    font-size: 4em;
+    text-align: center;
+}
+/* Configurar texto secundario da capa */
+.capa h2 {
+    text-align: center;
+    font-size: 1em;
+    color: saddlebrown;
+    margin-top: 2em;
+}
+/* Configurações sobre navegação */
+.navegacao {
+    display: block; 
+    height: 25px;
+    background-color: #1E4D6F;
+    width: 100%;
+}
+/* Configurações para a lista de links que forma o menu */
+.navegacao ul {
+    display: flex; /* Deixar display flex para poder alinhar o menu horizontalmente */
+    justify-content: center; /* Alinhar o menu no centro da tela */
+    list-style: none; 
+    margin: 0;
+    padding: 0;
+}
+/* Configurações dos itens do menu */
+.navegacao li { 
+    display: inline-block; /* Manter os itens do menu com o mesmo tamanho */
+}
+/* Configurações dos Links */
+.navegacao li a {
+    padding: 0.2em 2em;
+    display: block; /* Manter todos links com tamanho fixo */
+    color: chocolate;
+    text-decoration: none; /* Tirar sublinhado padrão dos links */
+}
+/* Ajustar links para quando se passa o mouse */
+.navegacao li a:hover {
+    background-color: antiquewhite;
+    display: block; /* Manter o mesmo tamanho dos itens ao se passar o mouse */
+}
+/* Configurações do texto principal dos conteudos do site */
+.conteudo h1{
+    margin: 40px 10px;
+    font-size: 2.6em;
+    text-align: center;
+}
+/* Configuração dos paragrafos dos conteudos */
+.conteudo p {
+    font-size: 1.2em;
+    text-align: justify;
+    padding: 1em 1.5em;
+    text-indent: 30px;
+}
+/* Leve configuração para ajustar margens do formulario */
+#formularioPedido {
+    margin: 10px;
+}
+/* Aumentar padding do conjunto de itens do formulario */
+.itemFormulario {
+    padding: 0.5em;
+}
