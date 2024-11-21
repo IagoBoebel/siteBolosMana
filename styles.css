@@ -2,11 +2,12 @@
 * {
     padding: 0;
     margin: 0;
+    box-sizing: border-box;
 }
 /* Configurando cor de plano de fundo do site */
 body {
     background-color: #AECBEA;
-    box-sizing: border-box;
+    overflow-x: hidden;
 }
 /* Configuração do fundo da capa e do tamanho */
 .capa {
@@ -69,4 +70,11 @@ nav a {
 }
 .nav-link {
     padding: 0.3em 0.7em !important;
+}
+footer {
+    background-color: #0A2A43;
+    color: white;
+}
+.icon i {
+    padding: 1em 1em !important;
 }
