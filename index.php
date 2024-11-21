@@ -1,8 +1,7 @@
 <?php 
 $title = "Início";
 include 'header.php';
-?>
-        
+?>        
         <section class="conteudo">
             <h1>Bem vindos a maior loja de bolos a pronta entrega do Brasil!</h1>
             <p>

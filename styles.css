@@ -30,6 +30,10 @@ body {
 /* Configurações sobre navegação */
 nav a:hover {
     background-color: white;
+    color: black !important;
+}
+nav a {
+    color:white !important;
 }
 .navegacao {
     background-color: #1E4D6F;
@@ -54,4 +58,8 @@ nav a:hover {
 /* Aumentar padding do conjunto de itens do formulario */
 .itemFormulario {
     padding: 0.5em;
+}
+.nav-link.active {
+    background-color: #007bff;
+    color: white;
 }
