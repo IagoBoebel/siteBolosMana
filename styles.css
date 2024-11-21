@@ -28,35 +28,11 @@ body {
     margin-top: 2em;
 }
 /* Configurações sobre navegação */
+nav a:hover {
+    background-color: white;
+}
 .navegacao {
-    display: block; 
-    height: 25px;
     background-color: #1E4D6F;
-    width: 100%;
-}
-/* Configurações para a lista de links que forma o menu */
-.navegacao ul {
-    display: flex; /* Deixar display flex para poder alinhar o menu horizontalmente */
-    justify-content: center; /* Alinhar o menu no centro da tela */
-    list-style: none; 
-    margin: 0;
-    padding: 0;
-}
-/* Configurações dos itens do menu */
-.navegacao li { 
-    display: inline-block; /* Manter os itens do menu com o mesmo tamanho */
-}
-/* Configurações dos Links */
-.navegacao li a {
-    padding: 0.2em 2em;
-    display: block; /* Manter todos links com tamanho fixo */
-    color: chocolate;
-    text-decoration: none; /* Tirar sublinhado padrão dos links */
-}
-/* Ajustar links para quando se passa o mouse */
-.navegacao li a:hover {
-    background-color: antiquewhite;
-    display: block; /* Manter o mesmo tamanho dos itens ao se passar o mouse */
 }
 /* Configurações do texto principal dos conteudos do site */
 .conteudo h1{
