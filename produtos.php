@@ -1,5 +1,5 @@
 <?php 
-$title = "Login";
+$title = "Produtos";
 include 'header.php';
 ?>
 <section>
@@ -7,6 +7,9 @@ include 'header.php';
 
 
 </section>
+
+
+
 <?php
 include 'footer.php';
 ?>

@@ -14,20 +14,29 @@
                 <h2>Os melhores sabores feitos com amor e tradição</h2>
             </div>
         </header>
-        <nav style="padding: 0" class="navegacao navbar navbar-expand-lg">
+        <nav style="padding:0" class="navbar navbar-expand-lg navegacao" >
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">    
                 <ul  class="navbar-nav">
                     <li class="nav-item">
-                        <a id="inicio"class="nav-link" href="index.php">Início</a>
-                    </li>   
-                    <li class="nav-item">
-                        <a id="Pedidos" class="nav-link" href="form.php">Pedidos</a>
+                    <a class="nav-link" href="index.php">Início</a>
                     </li>
                     <li class="nav-item">
-                        <a id="nossaHistoria" class="nav-link" href="nossa_historia.php">Nossa História</a>
+                        <a class="nav-link" href="produtos.php">Produtos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="nossa_historia.php">Nossa História</a>
+                    </li>   
+                    <li class="nav-item">
+                        <a class="nav-link" href="pedidos.php">Pedidos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="localizacao.php">Localização</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contato.php">Contato</a>
                     </li>
                 </ul>
             </div>
