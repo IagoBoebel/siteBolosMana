@@ -42,9 +42,16 @@
                     <li class="nav-item">
                         <a class="nav-link" href="login.php">Entrar</a>
                     </li>
-                    <?php if($_SESSION['autenticacao'] == 'SIM') { ?>
+                    <?php if($_SESSION['nivel_acesso'] == '1') { ?>
                         <li class="nav-item">
                             <a class="nav-link" href="administrador.php">Administrador</a>
+                        </li>
+                    <?php } ?>
+                    <?php if($_SESSION['autenticacao'] == 'SIM') { ?>
+                        <li class="nav-item">
+                            <button class="btn btn-danger">
+                                <a class="nav-link" href="logoff.php">Sair</a>
+                            </button>
                         </li>
                     <?php } ?>
                 </ul>
