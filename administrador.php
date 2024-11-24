@@ -2,7 +2,8 @@
 $title = "Administrador";
 include 'header.php';
 require_once "validar_acesso.php";
-?>         
+?> 
+ 
         <section class="container">
             <section class="row">
                 <section class="col-6">
