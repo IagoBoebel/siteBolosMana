@@ -11,7 +11,8 @@
         <?php session_start();?>
         <header class="capa">
             <div class="logo container">
-                <h1>Bolos da Mana</h1>
+                <h1>Bolos da Mana
+                </h1>
             </div>
         </header>
         <nav style="padding:0" class="navbar navbar-expand-lg navegacao" >
@@ -20,7 +21,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">    
-                <ul  class="navbar-nav mx-auto">
+                <ul class="navbar-nav d-flex justify-content-end">
                     <li class="nav-item">
                     <a class="nav-link" href="index.php">Início</a>
                     </li>

@@ -12,7 +12,7 @@ class BoloService {
         
     
     public function inserir() {
-         try {
+        try {
         $query = 'INSERT INTO produto (nome_bolo, preco_bolo, descricao_bolo, sabor_bolo, imagem_bolo) 
                   VALUES (:nome, :preco, :descricao, :sabor, :imagem);';
         $stmt = $this->conexao->prepare($query);
@@ -30,14 +30,43 @@ class BoloService {
     }
     }
     public function recuperar() {
-
-    }
-    public function atualizar() {
-
+        $query = "SELECT * FROM `produto`";
+        $stmt = $this->conexao->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    }   
+    public function atualizar($atr, $novo_atr) {
+        try {
+            $query = "UPDATE produto SET $atr = :novo_atr WHERE id_produto = :id_produto;";
+            $stmt = $this->conexao->prepare($query);
+            if (is_numeric($novo_atr)) {
+                $stmt->bindValue(':novo_atr', (int)$novo_atr, PDO::PARAM_INT); // Força o tipo INT
+            } else {
+                $stmt->bindValue(':novo_atr', $novo_atr, PDO::PARAM_STR); // Assume string como padrão
+            }
+            $stmt->bindValue(':id_produto', $this->bolo->__get('idDoProduto'));
+            $stmt->execute();
+            if($stmt->rowCount() === 0) {
+                throw new Exception('Não foi possível atualizar o registro');
+            }
+        } catch (Exception $e) {
+            throw $e;
+        }
     }
     public function remover() {
-
-    }
+        try {
+            $query = "DELETE FROM produto WHERE id_produto = :id_produto";
+            $stmt = $this->conexao->prepare($query);
+            $stmt->bindValue(':id_produto', $this->bolo->__get('idDoProduto'));
+            $stmt->execute();
+            if ($stmt->rowCount() === 0) {
+                throw new Exception('Falha na remoção do registro.');
+            }
+        } catch (Exception $e) {
+            throw $e;
+        }       
+    }   
 }
+
 
 ?>

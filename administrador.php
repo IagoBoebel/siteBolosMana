@@ -3,31 +3,56 @@ $title = "Administrador";
 include 'header.php';
 require_once "validar_acesso.php";
 ?> 
+<script>
+function botaoCreate() {
+    fetch('inserir_bolo.php') // Faz a requisição ao servidor
+        .then(response => response.text()) // Obtém o conteúdo como texto
+        .then(data => {
+            document.getElementById('crud').innerHTML = data; // Insere o conteúdo no elemento
+        })
+        .catch(error => console.error('Erro ao carregar o conteúdo:', error));
+}
+function botaoRead() {
+    fetch('visualizar_bolos.php') // Faz a requisição ao servidor
+        .then(response => response.text()) // Obtém o conteúdo como texto
+        .then(data => {
+            document.getElementById('crud').innerHTML = data; // Insere o conteúdo no elemento
+        })
+        .catch(error => console.error('Erro ao carregar o conteúdo:', error));
+}
+function botaoUpdate() {
+    fetch('atualizar_bolos.php') // Faz a requisição ao servidor
+        .then(response => response.text()) // Obtém o conteúdo como texto
+        .then(data => {
+            document.getElementById('crud').innerHTML = data; // Insere o conteúdo no elemento
+        })
+        .catch(error => console.error('Erro ao carregar o conteúdo:', error));
+}function botaoDelete() {
+    fetch('remover_bolo.php')    // Faz a requisição ao servidor
+        .then(response => response.text()) // Obtém o conteúdo como texto
+        .then(data => {
+            document.getElementById('crud').innerHTML = data; // Insere o conteúdo no elemento
+        })
+        .catch(error => console.error('Erro ao carregar o conteúdo:', error));
+}
+</script>
  
-        <section class="container">
-            <section class="row">
-                <section class="col-6">
-                <h1>Inserir novo bolo</h1>
-                <form class="form" action="bolo_controller.php" method="post">
-                    <label class="form-label">Nome do Bolo:</label>
-                    <input type="text" class="form-control" placeholder="Digite o nome do bolo" name="nome_bolo" required>
-                    <br>
-                    <label class="form-label">Preço do Bolo:</label>
-                    <input type="text" class="form-control" placeholder="Digite o preço do bolo" name="preco_bolo" required>
-                    <br>
-                    <label class="form-label">Sabor do Bolo:</label>
-                    <input type="text" class="form-control" placeholder="Digite o sabor do bolo" name="sabor_bolo" required>
-                    <br>
-                    <label class="form-label">Descrição do Bolo:</label>
-                    <input type="text" class="form-control" placeholder="Digite o descrição do bolo" name="descricao_bolo">
-                    <br>
-                    <label class="form-label">Imagem do Bolo:</label>
-                    <input type="text" class="form-control" placeholder="Adicione uma imagem para o bolo" name="imagem_bolo">
-                    <button class="btn btn-success my-3" type="submit">Adicionar</button>
-                </form>
-                </section>
-            </section>
-        </section>
+
+<div class="container">
+    <div class="row my-4">
+        <div class="col-12">
+            <button id="create" onclick="botaoCreate()" class="btn btn-secondary">Adicionar novo Bolo</button>
+            <button id="read" onclick="botaoRead()" class="btn btn-secondary">Visualizar Bolos</button>
+            <button id="update" onclick="botaoUpdate()" class="btn btn-secondary">Atualizar Bolo</button>
+            <button id="remove" onclick="botaoDelete()" class="btn btn-secondary">Remover Bolo</button>
+        </div>
+    </div>
+</div>
+<section id="crud" class="container">
+
+</section>
+
+        
 <?php
 include 'footer.php';
 ?>

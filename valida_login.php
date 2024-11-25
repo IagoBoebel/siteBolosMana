@@ -30,7 +30,7 @@
         $_SESSION['autenticacao'] = 'SIM';
         $_SESSION['id'] = $usuario_id;
         $_SESSION['nivel_acesso'] = $nivel_acesso;
-        header('Location: pedidos.php');
+        header('Location: index.php');
     } else {
         $_SESSION['autenticacao'] = "NAO";
         header('Location: login.php?login=erro');
