@@ -15,28 +15,39 @@ function ativarLink() {
 
 // Função para criar alertas do CRUD de bolos
 function alertasInsercao() {
-    const URL = window.location.search;
-    if(URL.includes("?inserido_com_sucesso")) {
-        alert('Bolo inserido com sucesso');
-        window.location.href = "administrador.php";
-    } else if (URL.includes('?erro_inserir')) {
-        alert('Não foi possível inserir o registro, tente novamente.');
-        window.location.href = "administrador.php";
-    } else if(URL.includes("?excluido_com_sucesso")) {
-        alert('Bolo excluido com sucesso');
-        window.location.href = "administrador.php";
-    } else if (URL.includes('?erro_excluir')) {
-        alert('Não foi possível excluir o registro, tente novamente.');
-        window.location.href = "administrador.php";
-    } else if(URL.includes("?atualizado_com_sucesso")) {
-        alert('Bolo atualizado com sucesso');
-        window.location.href = "administrador.php";
-    } else if (URL.includes('?erro_atualizar')) {
-        alert('Não foi possível atualizar o registro, tente novamente.');
-        window.location.href = "administrador.php";
+    const URL = decodeURIComponent(window.location.search);
+    let mensagem = "";
+    let destino = "administrador.php"; // Destino padrão
+    console.log("URL:", URL);
+    if (URL.includes("?inserido_com_sucesso")) {
+        mensagem = "Bolo inserido com sucesso";
+    } else if (URL.includes("?erro_inserir")) {
+        mensagem = "Não foi possível inserir o registro, tente novamente.";
+    } else if (URL.includes("?excluido_com_sucesso")) {
+        mensagem = "Bolo excluído com sucesso";
+    } else if (URL.includes("?erro_excluir")) {
+        mensagem = "Não foi possível excluir o registro, tente novamente.";
+    } else if (URL.includes("?atualizado_com_sucesso")) {
+        mensagem = "Bolo atualizado com sucesso";
+    } else if (URL.includes("?erro_atualizar")) {
+        mensagem = "Não foi possível atualizar o registro, tente novamente.";
+    } else if (URL.includes("?sucesso_criar_conta")) {
+        mensagem = "Parabéns, sua conta foi criada com sucesso.";
+    } else if (URL.includes("?falha_criar_conta")) {
+        mensagem = "Não foi possível criar a conta, tente novamente.";
+    }
+
+    if (mensagem) {
+        alert(mensagem);
+        window.location.href = destino;
     }
 }
 window.onload = function() {
-    ativarLink();
     alertasInsercao();
+    ativarLink();
+    
+}
+
+function criarNovaConta() {
+    window.location.href = "criar_nova_conta.php";
 }

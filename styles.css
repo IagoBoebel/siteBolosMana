@@ -78,3 +78,16 @@ footer {
 .icon i {
     padding: 1em 1em !important;
 }
+#botao_sair:hover {
+    background-color: transparent !important; /* Remove o fundo */
+}
+
+#botao_sair {
+    text-decoration: none; /* Remove sublinhado */
+    color: white; /* Define a cor inicial */
+}
+
+#botao_sair:hover {
+    color: white; /* Mantém a cor no hover */
+    text-decoration: none; /* Garante que não adicione sublinhado */
+}
