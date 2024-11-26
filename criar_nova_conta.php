@@ -62,6 +62,16 @@ include 'header.php';
         <button id="botaoSubmit" type="submit" class="btn btn-primary">Criar Conta</button>
     </div>
 </form>
+        <?php if(isset($_GET['criar_conta']) && $_GET['criar_conta'] == 'sim') { ?>
+                <div class="text-success d-flex flex-column align-items-center bg-white p-4 border border-3 mb-4">
+                    <p class="justify-content-center" style="padding-left: 0;">Parabéns, sua conta foi criada com sucesso</p>
+                </div>
+            <?php } ?>
+            <?php if(isset($_GET['criar_conta']) && $_GET['criar_conta'] == 'nao') { ?>
+                <div class="text-danger d-flex flex-column align-items-center bg-white p-4 border border-3 mb-4">
+                    <p class="justify-content-center" style="padding-left: 0;">Não foi possível criar a conta, tente novamente</p>
+                </div>
+            <?php } ?>
 
 
         

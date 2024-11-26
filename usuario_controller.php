@@ -21,9 +21,9 @@ if(isset($_GET['action']) && $_GET['action'] == 'create') {
         $conexao = new Conexao();
         $usuarioService = new UsuarioService($conexao, $usuario);
         $usuarioService->inserir();
-        header("Location: index.php?sucesso_criar_conta");
+        header("Location: criar_nova_conta.php?criar_conta=sim");
     } catch (Exception $e) {
-        header("Location: error.php?falha_criar_conta");
+        header("Location: criar_nova_conta.php?criar_conta=nao");
     }
 
 }
