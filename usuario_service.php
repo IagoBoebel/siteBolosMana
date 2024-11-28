@@ -13,7 +13,7 @@ class UsuarioService {
     
     public function inserir() {
         try {
-            $query = "INSERT INTO cliente (cpf_cliente, cep_cliente, email_cliente, nome_cliente, numero_casa_cliente, rua_cliente, senha_cliente, telefone_cliente)
+            $query = "INSERT INTO cliente (cpf_cliente, CEP, email_cliente, nome_cliente, numero_casa, rua, senha_cliente, telefone_cliente)
                         VALUES (:cpf, :cep, :email, :nome, :numero, :rua, :senha, :telefone);";
             $stmt = $this->conexao->prepare($query);
             $stmt->bindValue(':cpf', $this->usuario->__get('CPFUsuario'));
@@ -34,7 +34,7 @@ class UsuarioService {
     }
     public function recuperar() {
         try {
-            $query = "SELECT email_cliente, nome_cliente, id_cliente, senha_cliente, nivel_de_acesso FROM cliente;";
+            $query = "SELECT email_cliente, nome_cliente, id_cliente, senha_cliente, tipo_acesso FROM cliente;";
             $stmt = $this->conexao->prepare($query);
             $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

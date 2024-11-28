@@ -26,7 +26,7 @@
         if($user['email_cliente'] == $_POST['email'] && $user['senha_cliente'] == $_POST['senha']) {
             $autenticacao = true;
             $usuario_id = $user['id'];
-            $nivel_acesso = $user['nivel_de_acesso'];
+            $nivel_acesso = $user['tipo_acesso'];
         }
     }
 

@@ -1,0 +1,1167 @@
+<?php 
+$title = "Administrador"; 
+include 'header.php';  // Inclui o cabeçalho da página
+require_once "validar_acesso.php";  // Valida o acesso do usuário
+?> 
+
+<script>
+function botaoCreate() {
+    fetch('inserir_bolo.php')  // Requisição para inserir um bolo
+        .then(response => response.text())  // Obtém o conteúdo como texto
+        .then(data => {
+            document.getElementById('crud').innerHTML = data;  // Exibe o conteúdo no elemento com id 'crud'
+        })
+        .catch(error => console.error('Erro ao carregar o conteúdo:', error));  // Caso ocorra erro
+}
+
+function botaoRead() {
+    fetch('visualizar_bolos.php')  // Requisição para visualizar os bolos
+        .then(response => response.text())  // Obtém o conteúdo como texto
+        .then(data => {
+            document.getElementById('crud').innerHTML = data;  // Exibe o conteúdo no elemento com id 'crud'
+        })
+        .catch(error => console.error('Erro ao carregar o conteúdo:', error));  // Caso ocorra erro
+}
+
+function botaoUpdate() {
+    fetch('atualizar_bolos.php')  // Requisição para atualizar os bolos
+        .then(response => response.text())  // Obtém o conteúdo como texto
+        .then(data => {
+            document.getElementById('crud').innerHTML = data;  // Exibe o conteúdo no elemento com id 'crud'
+        })
+        .catch(error => console.error('Erro ao carregar o conteúdo:', error));  // Caso ocorra erro
+}
+
+function botaoDelete() {
+    fetch('remover_bolo.php')  // Requisição para remover um bolo
+        .then(response => response.text())  // Obtém o conteúdo como texto
+        .then(data => {
+            document.getElementById('crud').innerHTML = data;  // Exibe o conteúdo no elemento com id 'crud'
+        })
+        .catch(error => console.error('Erro ao carregar o conteúdo:', error));  // Caso ocorra erro
+}
+</script>
+
+<!-- Botões para ações CRUD -->
+<div class="container">
+    <div class="row my-4">
+        <div class="col-12">
+            <button id="create" onclick="botaoCreate()" class="btn btn-secondary">Adicionar novo Bolo</button>
+            <button id="read" onclick="botaoRead()" class="btn btn-secondary">Visualizar Bolos</button>
+            <button id="update" onclick="botaoUpdate()" class="btn btn-secondary">Atualizar Bolo</button>
+            <button id="remove" onclick="botaoDelete()" class="btn btn-secondary">Remover Bolo</button>
+        </div>
+    </div>
+</div>
+
+<section id="crud" class="container">
+    <!-- Ação CRUD será carregada aqui -->
+</section>
+
+<?php
+include 'footer.php';  // Inclui o rodapé da página
+?>
+
+
+
+
+atualizar_bolo: 
+
+<section class="row">
+    <section class="col-8">
+        <h1>Editar um bolo</h1>
+        <!-- Formulário para editar o bolo -->
+        <form class="form" action="bolo_controller.php?acao=update" method="post">
+            <label class="form-label">ID do Bolo:</label>
+            <input type="text" class="form-control" placeholder="Digite o ID do bolo que deve ser editado" name="id_para_atualizar" required>
+            <br>
+            <label for="atributo" class="form-label">Selecione a informação que deve ser alterada</label>
+            <select class="form-control" name="atributo" id="atributo" required>
+                <option value="nome_bolo">Nome</option>
+                <option value="preco_bolo">Preço</option> 
+                <option value="descricao_bolo">Descrição</option>
+                <option value="sabor_bolo">Sabor</option>
+                <option value="imagem_bolo">Imagem</option>
+            </select>
+            <br>
+            <label for="novo_atributo" class="form-label">Digite a nova informação</label>
+            <input type="text" class="form-control" id="novo_atributo" name="novo_atributo" required>
+            <button class="btn btn-success my-3" type="submit">Atualizar</button>
+        </form>
+    </section>
+</section>
+
+
+
+bolo_controller: <?php
+require "bolo.php";  // Inclui a classe Bolo
+require "bolo_service.php";  // Inclui a classe BoloService
+require "conexao.php";  // Inclui a classe de conexão com o banco de dados
+
+if (isset($_GET['acao']) && $_GET['acao'] == 'create') {
+    try {
+        // Instancia o objeto e define os valores
+        $bolo = new Bolo();
+        $bolo->__set('precoDoBolo', $_POST['preco_bolo']);
+        $bolo->__set('nomeDoBolo', $_POST['nome_bolo']);
+        $bolo->__set('descricaoDoBolo', $_POST['descricao_bolo']);
+        $bolo->__set('saborDoBolo', $_POST['sabor_bolo']);
+        $bolo->__set('imagemDoBolo', $_POST['imagem_bolo']);
+
+        // Conecta e insere os dados
+        $conexao = new Conexao();
+        $boloService = new BoloService($conexao, $bolo);
+        $boloService->inserir();
+
+        // Redireciona para sucesso
+        header('Location: administrador.php?inserido_com_sucesso');
+    } catch (Exception $e) {
+        header('Location: administrador.php?erro_inserir'); 
+    }
+} else if ($_GET['acao'] == 'read') {
+    $bolo = new Bolo();
+    $conexao = new Conexao();
+    $boloService = new BoloService($conexao, $bolo);
+    $bolos = $boloService->recuperar();
+} else if (isset($_GET['acao']) && $_GET['acao'] == 'update') {
+    try {
+        $id = $_POST['id_para_atualizar'];
+        $atr = $_POST['atributo'];
+        $novo_atr = $_POST['novo_atributo'];
+        $bolo = new Bolo();
+        $bolo->__set('idDoProduto', $id);
+        $conexao = new Conexao();
+        $boloService = new BoloService($conexao, $bolo);
+        $boloService->atualizar($atr, $novo_atr);
+        header('Location: administrador.php?atualizado_com_sucesso');
+    } catch (Exception $e) {
+        header('Location: administrador.php?erro_atualizar');
+    }
+} else if (isset($_GET['acao']) && $_GET['acao'] == 'delete') {
+    try {
+        $id = $_POST['id_para_excluir'];
+        $bolo = new Bolo();
+        $bolo->__set('idDoProduto', $id);
+        $conexao = new Conexao();
+        $boloService = new BoloService($conexao, $bolo);
+        $boloService->remover();
+        header('Location: administrador.php?excluido_com_sucesso');
+    } catch (Exception $e) {
+        header('Location: administrador.php?erro_excluir');
+    }
+}
+?>
+
+
+bolo_service.php: 
+
+class BoloService {
+    private $conexao;
+    private $bolo;
+    
+    public function __construct(Conexao $conexao, Bolo $bolo) {
+        $this->conexao = $conexao->conectar();
+        $this->bolo = $bolo;
+    }
+    
+    public function inserir() {
+        try {
+            $query = 'INSERT INTO produto (nome_bolo, preco_bolo, descricao_bolo, sabor_bolo, imagem_bolo) 
+                      VALUES (:nome, :preco, :descricao, :sabor, :imagem);';
+            $stmt = $this->conexao->prepare($query);
+            $stmt->bindValue(':nome', $this->bolo->__get('nomeDoBolo'));
+            $stmt->bindValue(':preco', $this->bolo->__get('precoDoBolo'));
+            $stmt->bindValue(':descricao', $this->bolo->__get('descricaoDoBolo'));
+            $stmt->bindValue(':sabor', $this->bolo->__get('saborDoBolo'));
+            $stmt->bindValue(':imagem', $this->bolo->__get('imagemDoBolo'));
+            $stmt->execute();
+            if ($stmt->rowCount() === 0) {
+                throw new Exception('Falha na inserção do registro.');
+            }
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+    
+    public function recuperar() {
+        $query = "SELECT * FROM `produto`";
+        $stmt = $this->conexao->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    public function atualizar($atributo, $novo_valor) {
+        $query = "UPDATE produto SET $atributo = :novo_valor WHERE id_bolo = :id";
+        $stmt = $this->conexao->prepare($query);
+        $stmt->bindValue(':id', $this->bolo->__get('idDoProduto'));
+        $stmt->bindValue(':novo_valor', $novo_valor);
+        $stmt->execute();
+    }
+    
+    public function remover() {
+        $query = "DELETE FROM produto WHERE id_bolo = :id";
+        $stmt = $this->conexao->prepare($query);
+        $stmt->bindValue(':id', $this->bolo->__get('idDoProduto'));
+        $stmt->execute();
+    }
+}
+
+
+conexao.php:
+
+<?php
+    // Definição da classe Conexao para gerenciar a conexão com o banco de dados
+    class Conexao {
+        private $host = 'localhost'; // Servidor de banco de dados
+        private $dbname = 'bolos_da_mana'; // Nome do banco de dados
+        private $user = 'root'; // Usuário do banco de dados
+        private $pass = 'nova_senha'; // Senha do banco de dados
+
+        // Método para conectar ao banco de dados usando PDO
+        public function conectar() {
+            // Estabelece a conexão com o banco de dados
+            $conexao = new PDO(
+                "mysql:host=$this->host;dbname=$this->dbname", // String de conexão
+                "$this->user", // Usuário do banco de dados
+                "$this->pass" // Senha do banco de dados
+            );
+            // Retorna a conexão
+            return $conexao;
+        }
+    }
+?>
+
+
+contato.php: 
+<?php 
+// Definindo o título da página e incluindo o header
+$title = "Contato";
+include 'header.php'; 
+?>
+<section class="conteudo">
+    <div class="container">
+        <h1>Bem vindos a maior loja de bolos a pronta entrega do Brasil!</h1>
+    </div>
+</section>
+<?php
+// Incluindo o footer no final da página
+include 'footer.php'; 
+?>
+
+
+criar_nova_conta.php:
+
+<?php 
+// Definindo o título da página e incluindo o header
+$title = "Nova Conta";
+include 'header.php'; 
+?>      
+<section class="conteudo">
+    <div class="container">
+        <h1 style="text-align: left">Preencha seu cadastro:</h1>
+        <section class="row">
+            <!-- Formulário de cadastro de nova conta -->
+            <form id="formularioCadastro" method="post" action="usuario_controller.php?action=create" class="container p-4 border rounded shadow-lg bg-light mb-5">
+                <h2 class="text-center mb-4">Cadastro de Nova Conta</h2>
+
+                <!-- Campo para Nome Completo -->
+                <div class="mb-3">
+                    <label for="nomeUsuario" class="form-label">Nome Completo:</label>
+                    <input id="nomeUsuario" type="text" name="nomeUsuario" placeholder="Digite seu nome completo" class="form-control" required>
+                </div>
+
+                <!-- Campo para Telefone -->
+                <div class="mb-3">
+                    <label for="telefoneUsuario" class="form-label">Telefone:</label>
+                    <input id="telefoneUsuario" type="tel" name="telefoneUsuario" placeholder="(XX) XXXXX-XXXX" class="form-control" required>
+                </div>
+
+                <!-- Campo para E-mail -->
+                <div class="mb-3">
+                    <label for="emailUsuario" class="form-label">E-mail:</label>
+                    <input id="emailUsuario" type="email" name="emailUsuario" placeholder="Digite seu e-mail" class="form-control" required>
+                </div>
+
+                <!-- Campo para Senha -->
+                <div class="mb-3">
+                    <label for="senhaUsuario" class="form-label">Senha:</label>
+                    <input id="senhaUsuario" type="password" name="senhaUsuario" placeholder="Digite uma senha" class="form-control" required minlength="8" title="A senha deve ter pelo menos 8 caracteres.">
+                </div>
+
+                <!-- Campo para CPF -->
+                <div class="mb-3">
+                    <label for="CPFUsuario" class="form-label">CPF:</label>
+                    <input id="CPFUsuario" type="text" name="CPFUsuario" placeholder="Digite seu CPF" class="form-control" required>
+                </div>
+
+                <!-- Campo para Rua -->
+                <div class="mb-3">
+                    <label for="ruaUsuario" class="form-label">Rua:</label>
+                    <input id="ruaUsuario" type="text" name="ruaUsuario" placeholder="Digite o nome da sua rua" class="form-control" required>
+                </div>
+
+                <!-- Campo para Número da Casa -->
+                <div class="mb-3">
+                    <label for="numeroCasaUsuario" class="form-label">Número da Casa:</label>
+                    <input id="numeroCasaUsuario" type="number" name="numeroCasaUsuario" placeholder="Digite o número da sua casa" class="form-control" required>
+                </div>
+
+                <!-- Campo para CEP -->
+                <div class="mb-3">
+                    <label for="CEPUsuario" class="form-label">CEP:</label>
+                    <input id="CEPUsuario" type="text" name="CEPUsuario" placeholder="Digite seu CEP" class="form-control">
+                </div>
+
+                <!-- Botão de envio do formulário -->
+                <div class="d-grid">
+                    <button id="botaoSubmit" type="submit" class="btn btn-primary">Criar Conta</button>
+                </div>
+            </form>
+
+            <!-- Mensagem de sucesso ao criar conta -->
+            <?php if(isset($_GET['criar_conta']) && $_GET['criar_conta'] == 'sim') { ?>
+                <div class="text-success d-flex flex-column align-items-center bg-white p-4 border border-3 mb-4">
+                    <p class="justify-content-center" style="padding-left: 0;">Parabéns, sua conta foi criada com sucesso</p>
+                </div>
+            <?php } ?>
+
+            <!-- Mensagem de erro ao criar conta -->
+            <?php if(isset($_GET['criar_conta']) && $_GET['criar_conta'] == 'nao') { ?>
+                <div class="text-danger d-flex flex-column align-items-center bg-white p-4 border border-3 mb-4">
+                    <p class="justify-content-center" style="padding-left: 0;">Não foi possível criar a conta, tente novamente</p>
+                </div>
+            <?php } ?>
+
+        </section>
+    </div>
+</section>
+<?php
+// Incluindo o footer no final da página
+include 'footer.php'; 
+?>
+
+footer: <?php 
+// Definindo o título da página e incluindo o header
+$title = "Nova Conta";
+include 'header.php'; 
+?>      
+<section class="conteudo">
+    <div class="container">
+        <h1 style="text-align: left">Preencha seu cadastro:</h1>
+        <section class="row">
+            <!-- Formulário de cadastro de nova conta -->
+            <form id="formularioCadastro" method="post" action="usuario_controller.php?action=create" class="container p-4 border rounded shadow-lg bg-light mb-5">
+                <h2 class="text-center mb-4">Cadastro de Nova Conta</h2>
+
+                <!-- Campo para Nome Completo -->
+                <div class="mb-3">
+                    <label for="nomeUsuario" class="form-label">Nome Completo:</label>
+                    <input id="nomeUsuario" type="text" name="nomeUsuario" placeholder="Digite seu nome completo" class="form-control" required>
+                </div>
+
+                <!-- Campo para Telefone -->
+                <div class="mb-3">
+                    <label for="telefoneUsuario" class="form-label">Telefone:</label>
+                    <input id="telefoneUsuario" type="tel" name="telefoneUsuario" placeholder="(XX) XXXXX-XXXX" class="form-control" required>
+                </div>
+
+                <!-- Campo para E-mail -->
+                <div class="mb-3">
+                    <label for="emailUsuario" class="form-label">E-mail:</label>
+                    <input id="emailUsuario" type="email" name="emailUsuario" placeholder="Digite seu e-mail" class="form-control" required>
+                </div>
+
+                <!-- Campo para Senha -->
+                <div class="mb-3">
+                    <label for="senhaUsuario" class="form-label">Senha:</label>
+                    <input id="senhaUsuario" type="password" name="senhaUsuario" placeholder="Digite uma senha" class="form-control" required minlength="8" title="A senha deve ter pelo menos 8 caracteres.">
+                </div>
+
+                <!-- Campo para CPF -->
+                <div class="mb-3">
+                    <label for="CPFUsuario" class="form-label">CPF:</label>
+                    <input id="CPFUsuario" type="text" name="CPFUsuario" placeholder="Digite seu CPF" class="form-control" required>
+                </div>
+
+                <!-- Campo para Rua -->
+                <div class="mb-3">
+                    <label for="ruaUsuario" class="form-label">Rua:</label>
+                    <input id="ruaUsuario" type="text" name="ruaUsuario" placeholder="Digite o nome da sua rua" class="form-control" required>
+                </div>
+
+                <!-- Campo para Número da Casa -->
+                <div class="mb-3">
+                    <label for="numeroCasaUsuario" class="form-label">Número da Casa:</label>
+                    <input id="numeroCasaUsuario" type="number" name="numeroCasaUsuario" placeholder="Digite o número da sua casa" class="form-control" required>
+                </div>
+
+                <!-- Campo para CEP -->
+                <div class="mb-3">
+                    <label for="CEPUsuario" class="form-label">CEP:</label>
+                    <input id="CEPUsuario" type="text" name="CEPUsuario" placeholder="Digite seu CEP" class="form-control">
+                </div>
+
+                <!-- Botão de envio do formulário -->
+                <div class="d-grid">
+                    <button id="botaoSubmit" type="submit" class="btn btn-primary">Criar Conta</button>
+                </div>
+            </form>
+
+            <!-- Mensagem de sucesso ao criar conta -->
+            <?php if(isset($_GET['criar_conta']) && $_GET['criar_conta'] == 'sim') { ?>
+                <div class="text-success d-flex flex-column align-items-center bg-white p-4 border border-3 mb-4">
+                    <p class="justify-content-center" style="padding-left: 0;">Parabéns, sua conta foi criada com sucesso</p>
+                </div>
+            <?php } ?>
+
+            <!-- Mensagem de erro ao criar conta -->
+            <?php if(isset($_GET['criar_conta']) && $_GET['criar_conta'] == 'nao') { ?>
+                <div class="text-danger d-flex flex-column align-items-center bg-white p-4 border border-3 mb-4">
+                    <p class="justify-content-center" style="padding-left: 0;">Não foi possível criar a conta, tente novamente</p>
+                </div>
+            <?php } ?>
+
+        </section>
+    </div>
+</section>
+<?php
+// Incluindo o footer no final da página
+include 'footer.php'; 
+?>
+footer:
+
+<?php 
+// Definindo o título da página e incluindo o header
+$title = "Nova Conta";
+include 'header.php'; 
+?>      
+<section class="conteudo">
+    <div class="container">
+        <h1 style="text-align: left">Preencha seu cadastro:</h1>
+        <section class="row">
+            <!-- Formulário de cadastro de nova conta -->
+            <form id="formularioCadastro" method="post" action="usuario_controller.php?action=create" class="container p-4 border rounded shadow-lg bg-light mb-5">
+                <h2 class="text-center mb-4">Cadastro de Nova Conta</h2>
+
+                <!-- Campo para Nome Completo -->
+                <div class="mb-3">
+                    <label for="nomeUsuario" class="form-label">Nome Completo:</label>
+                    <input id="nomeUsuario" type="text" name="nomeUsuario" placeholder="Digite seu nome completo" class="form-control" required>
+                </div>
+
+                <!-- Campo para Telefone -->
+                <div class="mb-3">
+                    <label for="telefoneUsuario" class="form-label">Telefone:</label>
+                    <input id="telefoneUsuario" type="tel" name="telefoneUsuario" placeholder="(XX) XXXXX-XXXX" class="form-control" required>
+                </div>
+
+                <!-- Campo para E-mail -->
+                <div class="mb-3">
+                    <label for="emailUsuario" class="form-label">E-mail:</label>
+                    <input id="emailUsuario" type="email" name="emailUsuario" placeholder="Digite seu e-mail" class="form-control" required>
+                </div>
+
+                <!-- Campo para Senha -->
+                <div class="mb-3">
+                    <label for="senhaUsuario" class="form-label">Senha:</label>
+                    <input id="senhaUsuario" type="password" name="senhaUsuario" placeholder="Digite uma senha" class="form-control" required minlength="8" title="A senha deve ter pelo menos 8 caracteres.">
+                </div>
+
+                <!-- Campo para CPF -->
+                <div class="mb-3">
+                    <label for="CPFUsuario" class="form-label">CPF:</label>
+                    <input id="CPFUsuario" type="text" name="CPFUsuario" placeholder="Digite seu CPF" class="form-control" required>
+                </div>
+
+                <!-- Campo para Rua -->
+                <div class="mb-3">
+                    <label for="ruaUsuario" class="form-label">Rua:</label>
+                    <input id="ruaUsuario" type="text" name="ruaUsuario" placeholder="Digite o nome da sua rua" class="form-control" required>
+                </div>
+
+                <!-- Campo para Número da Casa -->
+                <div class="mb-3">
+                    <label for="numeroCasaUsuario" class="form-label">Número da Casa:</label>
+                    <input id="numeroCasaUsuario" type="number" name="numeroCasaUsuario" placeholder="Digite o número da sua casa" class="form-control" required>
+                </div>
+
+                <!-- Campo para CEP -->
+                <div class="mb-3">
+                    <label for="CEPUsuario" class="form-label">CEP:</label>
+                    <input id="CEPUsuario" type="text" name="CEPUsuario" placeholder="Digite seu CEP" class="form-control">
+                </div>
+
+                <!-- Botão de envio do formulário -->
+                <div class="d-grid">
+                    <button id="botaoSubmit" type="submit" class="btn btn-primary">Criar Conta</button>
+                </div>
+            </form>
+
+            <!-- Mensagem de sucesso ao criar conta -->
+            <?php if(isset($_GET['criar_conta']) && $_GET['criar_conta'] == 'sim') { ?>
+                <div class="text-success d-flex flex-column align-items-center bg-white p-4 border border-3 mb-4">
+                    <p class="justify-content-center" style="padding-left: 0;">Parabéns, sua conta foi criada com sucesso</p>
+                </div>
+            <?php } ?>
+
+            <!-- Mensagem de erro ao criar conta -->
+            <?php if(isset($_GET['criar_conta']) && $_GET['criar_conta'] == 'nao') { ?>
+                <div class="text-danger d-flex flex-column align-items-center bg-white p-4 border border-3 mb-4">
+                    <p class="justify-content-center" style="padding-left: 0;">Não foi possível criar a conta, tente novamente</p>
+                </div>
+            <?php } ?>
+
+        </section>
+    </div>
+</section>
+<?php
+// Incluindo o footer no final da página
+include 'footer.php'; 
+?>
+
+
+header:
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- Título dinâmico da página -->
+        <title><?=$title?></title>
+        <!-- Link para o arquivo de estilo -->
+        <link rel="stylesheet" href="styles.css" />
+        <!-- Link para o Bootstrap -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    </head>
+    <body class="d-flex flex-column min-vh-100">
+        <!-- Iniciando a sessão -->
+        <?php session_start();?>
+        <!-- Cabeçalho da página -->
+        <header class="capa">
+            <div class="logo container">
+                <h1>Bolos da Mana</h1>
+            </div>
+        </header>
+        <nav style="padding:0" class="navbar navbar-expand-lg navegacao">
+            <div class="container d-flex position-relative">
+                <!-- Botão Toggle para dispositivos menores -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Alternar navegação">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <!-- Barra de navegação -->
+                <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.php">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="contato.php">Contato</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="criar_nova.php">Criar Conta</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <main>
+
+
+index.php: <?php 
+$title = "Início"; // Definindo o título da página
+include 'header.php'; // Incluindo o cabeçalho
+?>
+        <section class="conteudo"> <!-- Seção de conteúdo principal -->
+            <div class="container">
+                <h1>Bem vindos a maior loja de bolos a pronta entrega do Brasil!</h1> <!-- Título principal -->
+                <p>
+                    Descubra uma ampla variedade de bolos irresistíveis que vão deixar seu paladar encantado. 
+                    Cada um de nossos bolos é preparado com os melhores ingredientes frescos, cuidadosamente selecionados para garantir sabor e qualidade em cada fatia. 
+                    Com receitas exclusivas e toques especiais que só a nossa confeitaria pode oferecer, os bolos são criados para proporcionar momentos únicos e memoráveis.
+                </p>
+                <p>
+                    Seja para uma simples reunião entre amigos, uma comemoração íntima em família, ou um evento grandioso, nossos bolos são a escolha ideal. 
+                    Celebramos junto com você cada conquista e data importante: desde aniversários, formaturas e festas de casamento, até aquele momento especial de pausa para um café da tarde.
+                </p>
+                <p>
+                    Além disso, cada detalhe de nossos bolos é pensado para agradar tanto aos olhos quanto ao paladar. 
+                    Nossos confeiteiros utilizam técnicas que combinam tradição e inovação, criando bolos que não apenas têm um gosto inigualável, mas também uma apresentação visual que impressiona. 
+                    Seja qual for a ocasião, você encontrará uma opção que se adapta perfeitamente ao seu estilo e necessidade, tornando o momento ainda mais especial.
+                </p>
+                <p>
+                    Não importa se você prefere sabores clássicos como o bolo de chocolate com recheio cremoso ou opções mais ousadas com frutas frescas e combinações exclusivas, nós temos o bolo perfeito para tornar seu dia mais doce e inesquecível. 
+                    Experimente a diferença que a paixão pela confeitaria faz e compartilhe com quem você ama a experiência de saborear um bolo feito com carinho e dedicação.
+                </p>
+            </div>
+        </section>
+        
+<?php
+include 'footer.php'; // Incluindo o rodapé
+?>
+
+
+inserir_bolo.php:
+
+<section class="row"> <!-- Seção de inserção do bolo -->
+    <section class="col-8 ">
+    <h1>Inserir novo bolo</h1> <!-- Título da seção -->
+    <form class="form" action="bolo_controller.php?acao=create" method="post"> <!-- Formulário para criação de bolo -->
+        <label class="form-label">Nome do Bolo:</label>
+        <input type="text" class="form-control" placeholder="Digite o nome do bolo" name="nome_bolo" required> <!-- Input para o nome do bolo -->
+        <br>
+        <label class="form-label">Preço do Bolo:</label>
+        <input type="text" class="form-control" placeholder="Digite o preço do bolo" name="preco_bolo" required> <!-- Input para o preço -->
+        <br>
+        <label class="form-label">Sabor do Bolo:</label>
+        <input type="text" class="form-control" placeholder="Digite o sabor do bolo" name="sabor_bolo" required> <!-- Input para o sabor -->
+        <br>
+        <label class="form-label">Descrição do Bolo:</label>
+        <input type="text" class="form-control" placeholder="Digite o descrição do bolo" name="descricao_bolo"> <!-- Input para descrição -->
+        <br>
+        <label class="form-label">Imagem do Bolo:</label>
+        <input type="text" class="form-control" placeholder="Adicione uma imagem para o bolo" name="imagem_bolo"> <!-- Input para a imagem -->
+        <button class="btn btn-success my-3" type="submit">Adicionar</button> <!-- Botão para adicionar o bolo -->
+    </form>
+    </section>
+</section>
+
+
+localizacao.php:
+
+<?php 
+$title = "Localização"; // Definindo o título da página
+include 'header.php'; // Incluindo o cabeçalho
+?>
+<section class="conteudo"> <!-- Seção de conteúdo -->
+        <div class="container">
+            <h1>Bem vindos a maior loja de bolos a pronta entrega do Brasil!</h1> <!-- Título da página -->
+        </div>
+    </section>
+
+<?php
+include 'footer.php'; // Incluindo o rodapé
+?>
+
+
+login.php:
+<?php 
+$title = "Entrar"; // Definindo o título da página
+include 'header.php'; // Incluindo o cabeçalho
+session_start(); // Iniciando a sessão
+?>
+<section class="conteudo container"> <!-- Seção de conteúdo do login -->
+        <div class="row">
+            <div class=" card d-flex flex-column justify-content-center align-items-center mt-5 border-0"> <!-- Cartão de login -->
+            <form class=" col-4 p-4 bg-secondary form" method="post" action="valida_login.php"> <!-- Formulário de login -->
+                <label class="form-label" for="email">E-mail</label><br>
+                <input class="form-control" type="email" placeholder="Digite Seu Email" name="email"> <!-- Campo de e-mail -->
+                <br>
+                <label class="form-label" for="senha">Senha</label><br>
+                <input class="form-control"type="password" placeholder="Digite Sua Senha" name="senha"> <!-- Campo de senha -->
+                <br>
+                <div class="d-flex justify-content-between"> <!-- Botões de login e criação de conta -->
+                    <button class="btn btn-info" type="submit">Entrar</button>
+                    <button class="btn btn-info" onclick="criarNovaConta()" type="button">Criar nova conta</button>
+                </div>    
+            </form>
+            <!-- Exibindo mensagens de erro -->
+            <?php if(isset($_GET['login']) && $_GET['login'] == 'erro2') { ?>
+                <div class="col-4 text-danger d-flex flex-column align-items-center">
+                    <p class="justify-content-center" style="padding-left: 0;">Faça login antes de acessar</p>
+                </div>
+            <?php } ?>
+            <?php if(isset($_GET['login']) && $_GET['login'] == 'erro') { ?>
+                <div class="col-4 text-danger d-flex flex-column align-items-center">
+                    <p class="justify-content-center" style="padding-left: 0;">Usuario ou senha inválidos</p>
+                </div>
+            <?php } ?>
+            </div>
+        </div>
+    </section>
+<?php
+include 'footer.php'; // Incluindo o rodapé
+?>
+
+
+
+logoff.php:
+
+<?php 
+$title = "Entrar"; // Definindo o título da página
+include 'header.php'; // Incluindo o cabeçalho
+session_start(); // Iniciando a sessão
+?>
+<section class="conteudo container"> <!-- Seção de conteúdo do logoff -->
+        <div class="row">
+            <div class=" card d-flex flex-column justify-content-center align-items-center mt-5 border-0"> <!-- Cartão de logoff -->
+            <form class=" col-4 p-4 bg-secondary form" method="post" action="valida_login.php"> <!-- Formulário de login -->
+                <label class="form-label" for="email">E-mail</label><br>
+                <input class="form-control" type="email" placeholder="Digite Seu Email" name="email"> <!-- Campo de e-mail -->
+                <br>
+                <label class="form-label" for="senha">Senha</label><br>
+                <input class="form-control"type="password" placeholder="Digite Sua Senha" name="senha"> <!-- Campo de senha -->
+                <br>
+                <div class="d-flex justify-content-between"> <!-- Botões de login e criação de conta -->
+                    <button class="btn btn-info" type="submit">Entrar</button>
+                    <button class="btn btn-info" onclick="criarNovaConta()" type="button">Criar nova conta</button>
+                </div>    
+            </form>
+            <!-- Exibindo mensagens de erro -->
+            <?php if(isset($_GET['login']) && $_GET['login'] == 'erro2') { ?>
+                <div class="col-4 text-danger d-flex flex-column align-items-center">
+                    <p class="justify-content-center" style="padding-left: 0;">Faça login antes de acessar</p>
+                </div>
+            <?php } ?>
+            <?php if(isset($_GET['login']) && $_GET['login'] == 'erro') { ?>
+                <div class="col-4 text-danger d-flex flex-column align-items-center">
+                    <p class="justify-content-center" style="padding-left: 0;">Usuario ou senha inválidos</p>
+                </div>
+            <?php } ?>
+            </div>
+        </div>
+    </section>
+<?php
+include 'footer.php'; // Incluindo o rodapé
+?>
+
+
+
+nossa_história: <?php 
+$title = "Nossa História"; // Definindo o título da página
+include 'header.php'; // Incluindo o cabeçalho
+?>
+<section class="conteudo"> <!-- Seção de conteúdo -->
+    <div class="container"> <!-- Container para centralizar o conteúdo -->
+        <h1>Sobre este trabalho:</h1> <!-- Título principal -->
+        <p> <!-- Parágrafo explicando sobre o trabalho -->
+            Este site foi criado pelo aluno Iago Luigi Boebel do curso de Análise e Desenvolvimento de Software para a disciplina de Fundamentos da Programação Web.
+            Ele foi desenvolvido utilizando HTML, CSS e Javascript. As formatações de CSS foram feitas através de classes, os formulários são de preenchimento 
+            obrigatório através do atributo required do HTML e o tratamento do formulário foi feito através do Javascript lendo os parâmetros passados pela URL com 
+            o método GET. O site tem o intuito de, no futuro, ser o e-commerce da loja de bolos da minha mãe.
+        </p>
+    </div>
+</section> 
+<?php
+include 'footer.php'; // Incluindo o rodapé
+?>
+
+
+produtos: 
+
+<?php 
+$title = "Produtos"; // Definindo o título da página
+include 'header.php'; // Incluindo o cabeçalho
+?>
+<section class="conteudo"> <!-- Seção de conteúdo -->
+    <div class="container"> <!-- Container para centralizar o conteúdo -->
+        <h1>Bem-vindos à maior loja de bolos à pronta entrega do Brasil!</h1> <!-- Título da página -->
+    </div>
+</section>
+<?php
+include 'footer.php'; // Incluindo o rodapé
+?>
+remover_bolo.php:
+
+<?php
+$acao = 'read'; // Definindo a ação como 'read' para buscar os bolos
+require 'bolo_controller.php'; // Incluindo o controlador de bolos para buscar os dados
+?>
+
+<section class="row"> <!-- Seção com o layout de linha -->
+    <section class="col-8"> <!-- Seção com largura definida -->
+        <h1>Excluir um Bolo</h1> <!-- Título da seção -->
+        <form class="form" action="bolo_controller.php?acao=delete" method="post"> <!-- Formulário para exclusão de bolo -->
+            <label for="id_para_excluir" class="form-label">Selecione o ID e o Bolo para excluir</label> <!-- Rótulo para a seleção -->
+            <select class="form-control" name="id_para_excluir" id="id_para_excluir"> <!-- Caixa de seleção para escolher o bolo a ser excluído -->
+                <?php
+                // Loop para exibir todos os bolos disponíveis para exclusão
+                foreach($bolos as $bolo) {
+                    echo "<option value='{$bolo->id_produto}'>{$bolo->id_produto} - {$bolo->nome_bolo}</option>";
+                    }
+                ?>
+            </select>
+            <br>
+            <button class="btn btn-danger my-3" type="submit">Excluir</button> <!-- Botão para excluir o bolo -->
+        </form>
+    </section>
+</section>
+
+
+Script.js:
+
+// Função para ativar o link correspondente ao título da página
+function ativarLink() {
+    var pagAtual = document.title.toLowerCase(); // Obtém o título da página atual em minúsculo
+    var linksMenu = document.querySelectorAll(".nav-link"); // Seleciona todos os links de navegação
+
+    // Para cada link de navegação, compara o texto do link com o título da página
+    linksMenu.forEach(function(link) {
+        var textoLink = link.textContent.toLowerCase(); // Obtém o texto do link em minúsculo
+        if (pagAtual == textoLink) {
+            link.classList.add('active'); // Adiciona a classe 'active' ao link correspondente
+        } else {
+            link.classList.remove('active') // Remove a classe 'active' dos links não correspondentes
+        }     
+    });
+}
+
+// Função para exibir alertas baseados nos parâmetros da URL
+function alertasInsercao() {
+    const URL = decodeURIComponent(window.location.search); // Decodifica a URL
+    let mensagem = ""; // Mensagem de alerta
+    let destino = "administrador.php"; // Página de destino padrão após exibir o alerta
+    console.log("URL:", URL); // Exibe a URL no console para depuração
+
+    // Verifica os parâmetros na URL e define a mensagem adequada
+    if (URL.includes("?inserido_com_sucesso")) {
+        mensagem = "Bolo inserido com sucesso";
+    } else if (URL.includes("?erro_inserir")) {
+        mensagem = "Não foi possível inserir o registro, tente novamente.";
+    } else if (URL.includes("?excluido_com_sucesso")) {
+        mensagem = "Bolo excluído com sucesso";
+    } else if (URL.includes("?erro_excluir")) {
+        mensagem = "Não foi possível excluir o registro, tente novamente.";
+    } else if (URL.includes("?atualizado_com_sucesso")) {
+        mensagem = "Bolo atualizado com sucesso";
+    } else if (URL.includes("?erro_atualizar")) {
+        mensagem = "Não foi possível atualizar o registro, tente novamente.";
+    } else if (URL.includes("?sucesso_criar_conta")) {
+        mensagem = "Parabéns, sua conta foi criada com sucesso.";
+    } else if (URL.includes("?falha_criar_conta")) {
+        mensagem = "Não foi possível criar a conta, tente novamente.";
+    }
+
+    // Exibe o alerta se houver uma mensagem e redireciona para o destino
+    if (mensagem) {
+        alert(mensagem);
+        window.location.href = destino;
+    }
+}
+
+// Executa as funções quando a página for carregada
+window.onload = function() {
+    alertasInsercao(); // Chama a função de alertas
+    ativarLink(); // Chama a função para ativar o link de navegação
+}
+
+// Função para redirecionar para a página de criação de nova conta
+function criarNovaConta() {
+    window.location.href = "criar_nova_conta.php";
+}
+
+css:
+
+/* Zerando definições padrões de browser */
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box; /* Garantir que padding e margin sejam contados no tamanho total */
+}
+
+/* Configurando cor de plano de fundo do site */
+body {
+    background-color: #AECBEA; /* Cor de fundo azul clara */
+    overflow-x: hidden; /* Impede rolagem horizontal */
+}
+
+/* Configuração do fundo da capa e do tamanho */
+.capa {
+    background-color: #0A2A43; /* Cor de fundo escura para a capa */
+    width: 100%;
+    height: 200px; /* Tamanho fixo para a capa */
+}
+
+/* Classe para o texto da capa */
+.capa h1 {
+    box-shadow: 0 4px 8px #00000033; /* Sombra para destacar o texto */
+    color: saddlebrown; /* Cor do texto */
+    font-size: 4em; /* Tamanho grande para o título */
+    text-align: center; /* Alinha o título ao centro */
+}
+
+/* Configurar texto secundario da capa */
+.capa h2 {
+    text-align: center;
+    font-size: 1em;
+    color: saddlebrown;
+    margin-top: 2em; /* Espaçamento superior */
+}
+
+/* Configurações sobre navegação */
+.navbar {
+    font-size: 1.5em; /* Tamanho maior para links de navegação */
+}
+
+nav a:hover {
+    background-color: #007bff; /* Efeito de hover: cor de fundo azul */
+}
+
+nav a {
+    color:white !important; /* Cor do texto dos links */
+}
+
+.navegacao {
+    background-color: #1E4D6F; /* Cor de fundo azul escuro para a barra de navegação */
+    padding: 0;
+}
+
+/* Configurações do texto principal dos conteudos do site */
+.conteudo h1{
+    margin: 40px 10px; /* Margem para espaçar o título */
+    font-size: 2.6em; /* Tamanho maior para o título */
+    text-align: center; /* Alinha o título ao centro */
+}
+
+/* Configuração dos paragrafos dos conteudos */
+.conteudo p {
+    font-size: 1.2em; /* Tamanho da fonte do parágrafo */
+    text-align: justify; /* Justifica o texto */
+    padding: 1em 1.5em; /* Espaçamento interno */
+    text-indent: 30px; /* Indenta o início do parágrafo */
+}
+
+/* Leve configuração para ajustar margens do formulario */
+#formularioPedido {
+    margin: 10px; /* Espaçamento das bordas do formulário */
+}
+
+/* Aumentar padding do conjunto de itens do formulario */
+.itemFormulario {
+    padding: 0.5em; /* Espaçamento interno dos itens do formulário */
+}
+
+/* Classe ativa para links de navegação */
+.nav-link.active {
+    background-color: #007bff; /* Cor de fundo azul quando o link está ativo */
+    color: white; /* Cor do texto */
+}
+
+.nav-link {
+    padding: 0.3em 0.7em !important; /* Espaçamento dos links */
+}
+
+/* Configuração do rodapé */
+footer {
+    background-color: #0A2A43; /* Cor de fundo escuro para o rodapé */
+    color: white; /* Cor do texto */
+}
+
+/* Configuração dos ícones dentro de uma div com classe icon */
+.icon i {
+    padding: 1em 1em !important; /* Espaçamento para ícones */
+}
+
+/* Efeito de hover para o botão sair */
+#botao_sair:hover {
+    background-color: transparent !important; /* Remove o fundo */
+}
+
+/* Configuração inicial do botão sair */
+#botao_sair {
+    text-decoration: none; /* Remove o sublinhado */
+    color: white; /* Cor inicial */
+}
+
+/* Efeito de hover para o botão sair */
+#botao_sair:hover {
+    color: white; /* Mantém a cor ao passar o mouse */
+    text-decoration: none; /* Garante que não apareça o sublinh
+
+
+usuario_model:
+<?php
+    // Classe para manipulação de dados do usuário
+    class Usuario {
+        private $idUsuario; // Atributo para armazenar o ID do usuário
+        private $nomeUsuario; // Atributo para armazenar o nome do usuário
+        private $telefoneUsuario; // Atributo para armazenar o telefone do usuário
+        private $emailUsuario; // Atributo para armazenar o e-mail do usuário
+        private $senhaUsuario; // Atributo para armazenar a senha do usuário
+        private $CPFUsuario; // Atributo para armazenar o CPF do usuário
+        private $ruaUsuario; // Atributo para armazenar o nome da rua do usuário
+        private $numeroCasaUsuario; // Atributo para armazenar o número da casa do usuário
+        private $CEPUsuario; // Atributo para armazenar o CEP do usuário
+        private $nivelAcesso = 2; // Atributo para definir o nível de acesso, padrão 2 (usuário comum)
+        
+        // Método mágico para obter o valor de um atributo
+        public function __get($atributo) {
+            return $this->$atributo;
+        }
+
+        // Método mágico para definir o valor de um atributo
+        public function __set($atributo, $valor) {
+            $this->$atributo = $valor;
+        }
+    }
+?>
+
+
+usuario_service:
+
+<?php
+
+// Classe de serviço responsável pelas operações CRUD (inserir, recuperar) no banco de dados
+class UsuarioService {
+
+    private $conexao; // Objeto para conexão com o banco de dados
+    private $usuario; // Objeto da classe Usuario
+    
+    // Construtor para inicializar a conexão e o objeto Usuario
+    public function __construct(Conexao $conexao, Usuario $usuario) {
+        $this->conexao = $conexao->conectar(); // Estabelece a conexão com o banco de dados
+        $this->usuario = $usuario; // Recebe o objeto usuário
+    }
+
+    // Método para cadastrar um novo usuário
+    public function cadastrar() {
+        // Prepara a consulta para inserir o usuário no banco
+        $query = 'INSERT INTO usuarios(nome, telefone, email, senha, cpf, rua, numeroCasa, cep, nivelAcesso) 
+                  VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        
+        $stmt = $this->conexao->prepare($query); // Prepara a consulta SQL
+        // Passa os parâmetros para a consulta SQL
+        $stmt->bind_param('sssssssss', 
+            $this->usuario->__get('nomeUsuario'),
+            $this->usuario->__get('telefoneUsuario'),
+            $this->usuario->__get('emailUsuario'),
+            $this->usuario->__get('senhaUsuario'),
+            $this->usuario->__get('CPFUsuario'),
+            $this->usuario->__get('ruaUsuario'),
+            $this->usuario->__get('numeroCasaUsuario'),
+            $this->usuario->__get('CEPUsuario'),
+            $this->usuario->__get('nivelAcesso')
+        );
+        
+        return $stmt->execute(); // Executa a consulta e retorna o resultado
+    }
+
+    // Método para obter todos os usuários
+    public function recuperarUsuarios() {
+        $query = 'SELECT id, nome, email FROM usuarios';
+        $stmt = $this->conexao->prepare($query); // Prepara a consulta
+        $stmt->execute(); // Executa a consulta
+        
+        return $stmt->get_result(); // Retorna o resultado da consulta
+    }
+
+    // Método para recuperar um único usuário
+    public function recuperarUsuario($id) {
+        $query = 'SELECT * FROM usuarios WHERE id = ?';
+        $stmt = $this->conexao->prepare($query); // Prepara a consulta
+        $stmt->bind_param('i', $id); // Define o parâmetro da consulta (ID do usuário)
+        $stmt->execute(); // Executa a consulta
+        
+        return $stmt->get_result()->fetch_assoc(); // Retorna o usuário encontrado
+    }
+}
+?>
+
+
+valida_login:
+<?php
+    // Inclui os arquivos necessários para acessar os serviços e a model do usuário
+    include "usuario_service.php";
+    include "conexao.php";
+    include "usuario_model.php";
+
+    // Inicia a sessão para gerenciar os dados do usuário durante a autenticação
+    session_start();
+
+    // Variáveis que armazenam o status de autenticação e as informações do usuário
+    $autenticacao = false; // Inicializa como falso, assumindo que o usuário não está autenticado
+    $usuario_id = null; // ID do usuário autenticado, será preenchido se a autenticação for bem-sucedida
+    $nivel_acesso = null; // Nível de acesso do usuário (ex: Admin, Usuário)
+    
+    // Define os níveis de acesso possíveis
+    $niveis_de_acesso = array(1 => 'Administrativo', 2 => 'Usuário');
+
+    // Cria um novo objeto de usuário e um objeto de conexão
+    $usuario = new Usuario();
+    $conexao = new Conexao();
+
+    // Cria o serviço de usuário para acessar dados no banco
+    $usuario_service = new UsuarioService($conexao, $usuario);
+
+    // Recupera todos os usuários do banco de dados
+    $usuarios = $usuario_service->recuperar();
+
+    // Loop para verificar se o email e a senha informados correspondem a algum usuário
+    foreach($usuarios as $user) {
+        // Verifica se as credenciais informadas são válidas
+        if($user['email_cliente'] == $_POST['email'] && $user['senha_cliente'] == $_POST['senha']) {
+            $autenticacao = true; // Se encontrar, autentica o usuário
+            $usuario_id = $user['id']; // Armazena o ID do usuário autenticado
+            $nivel_acesso = $user['nivel_de_acesso']; // Armazena o nível de acesso do usuário
+        }
+    }
+
+    // Verifica se a autenticação foi bem-sucedida
+    if ($autenticacao) {
+        // Caso a autenticação seja bem-sucedida, armazena as informações na sessão
+        $_SESSION['autenticacao'] = 'SIM'; // Marca como autenticado
+        $_SESSION['id'] = $usuario_id; // Armazena o ID do usuário
+        $_SESSION['nivel_acesso'] = $nivel_acesso; // Armazena o nível de acesso do usuário
+        // Redireciona para a página principal após login bem-sucedido
+        header('Location: index.php');
+    } else {
+        // Caso a autenticação falhe, marca a sessão como não autenticada
+        $_SESSION['autenticacao'] = "NAO";
+        // Redireciona de volta para a página de login com erro
+        header('Location: login.php?login=erro');
+    }
+?>
+
+
+validar_acesso:
+<?php
+  // Inicia a sessão para verificar se o usuário está autenticado
+  session_start();
+  
+  // Verifica se o usuário não está autenticado, caso contrário, redireciona para a página de login
+  if(!isset($_SESSION['autenticacao']) || $_SESSION['autenticacao'] != 'SIM') {
+    // Redireciona para a página de login com um erro de autorização
+    header('Location: login.php?login=erro2');
+  }
+?>
+
+visualizar_bolos; 
+
+<?php
+// Define a ação para visualizar os bolos (read)
+$acao = 'read';
+// Inclui o controlador de bolos, que gerencia a lógica de exibição dos bolos
+require 'bolo_controller.php';
+?>
+
+<section class="row">
+    <section class="col-12">
+        <!-- Criação da tabela para exibir os bolos -->
+        <table class="table">
+            <!-- Cabeçalho da tabela com os títulos das colunas -->
+            <tr>
+                <th>ID</th>            
+                <th>Bolo</th>
+                <th>Preço</th>
+                <th>Sabor</th>
+                <th>Descrição</th>
+                <th>Imagem</th>
+            </tr>
+
+            <?php
+            // Loop para percorrer todos os bolos recuperados do banco e exibi-los na tabela
+            foreach($bolos as $bolo) {
+                echo "<tr> 
+                        <td> {$bolo->id_produto} </td>  
+                        <td> {$bolo->nome_bolo} </td> 
+                        <td> {$bolo->preco_bolo} </td> 
+                        <td> {$bolo->sabor_bolo} </td> 
+                        <td> {$bolo->descricao_bolo} </td> 
+                        <td> {$bolo->imagem_bolo} </td> 
+                    
+                    </tr>";
+            }
+            ?>
+        </table>
+    </section>
+</section>

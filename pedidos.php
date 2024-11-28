@@ -1,60 +1,53 @@
 <?php 
 $title = "Pedidos";
 include 'header.php';
-require_once "validar_acesso.php";
+include 'pedido_service.php';
+include 'conexao.php';
+include 'pedido_model.php';
 ?>      
-    <section class="conteudo">
-        <div class="container">
-        <h1 style="text-align: left">Faça seu pedido:</h1>
-        <section>
-            <form id="formularioPedido" method="get" action="formAction.html">
-                <div class="itemFormulario">
-                    <label for="nome">Nome:</label>
-                    <br>                  
-                    <input id="nome" type="text" name="nome" placeholder="Digite Seu Nome" required>        
-                    <br>
-                </div>
-                <div class="itemFormulario">
-                    <label for="telefone">Telefone:</label>
-                    <br>
-                    <input id="telefone" type="tel" name="telefone" placeholder="Digite Seu Telefone" required>
-                    <br>
-                </div>
-                    <div class="itemFormulario">
-                    <label for="cep">Endereço:</label>
-                    <br>
-                    <input id="cep" type="text" name="endereco" placeholder="Digite Seu Endereço Completo" required>
-                    <br>
-                </div>
-                
-                <div class="itemFormulario">
-                <label for="sabor">Escolha um sabor:</label>
-                    <br>
-                    <select id="sabor" name="sabor" required>
-                        <option value="Chocolate">Chocolate</option>
-                        <option value="Cereja">Cereja</option>
-                        <option value="Baunilha">Baunilha</option>
-                        <option value="Frutas">Frutas Frescas</option>
-                        <option value="Morango">Morango</option>
-                    </select>
-                    <br>
-                </div>
-                <div class="itemFormulario">
-                    <label>Você irá retirar o bolo na loja?</label>
-                    <br>
-                    <label for="retiradaNao">Sim</label>
-                    <input id="retiradaNao" type="radio" name="retirada" value="Sim" required>
-                    <br>
-                    <label for="retiradaSim">Não</label>
-                    <input id="retiradaSim" type="radio" name="retirada" value="Nao">
-                    <br>
-                    <input id="botaoSubmit" type="submit">
-                </div>
-            </form>
-        
-        </section>
+
+<script>
+function botaoNovoPedido() {
+    fetch('novo_pedido.php') // Faz a requisição ao servidor
+        .then(response => response.text()) // Obtém o conteúdo como texto
+        .then(data => {
+            document.getElementById('pdido').innerHTML = data; // Insere o conteúdo no elemento
+        })
+        .catch(error => console.error('Erro ao carregar o conteúdo:', error));
+}
+function botaoAcompanharPedido() {
+    fetch('pedido_controller.php?pedido=status') // Faz a requisição ao servidor
+        .then(response => response.text()) // Obtém o conteúdo como texto
+        .then(data => {
+            document.getElementById('pdido').innerHTML = data; // Insere o conteúdo no elemento
+        })
+        .catch(error => console.error('Erro ao carregar o conteúdo:', error));
+}
+</script>
+<section class="conteudo">
+<div class="container">
+    <div class="row my-4">
+        <div class="col-12">
+            <button id="create_pdido" onclick="botaoNovoPedido()" class="btn btn-success">Novo</button>
+            <button id="read_pdido" onclick="botaoAcompanharPedido()" class="btn btn-secondary">Acompanhar Pedido</button>
         </div>
-    </section>
+    </div>
+</div>
+<section id="pdido" class="container">
+
+</section>
+         <!-- Mensagens de Sucesso ou Erro -->
+         <?php if(isset($_GET['status']) && $_GET['status'] == 'sim') { ?>
+                <div class="text-success d-flex flex-column align-items-center bg-white p-4 border border-3 mb-4">
+                    <p class="justify-content-center">Pedido realizado com sucesso!</p>
+                </div>
+            <?php } ?>
+            <?php if(isset($_GET['status']) && $_GET['status'] == 'nao') { ?>
+                <div class="text-danger d-flex flex-column align-items-center bg-white p-4 border border-3 mb-4">
+                    <p class="justify-content-center">Erro ao realizar o pedido. Tente novamente.</p>
+                </div>
+            <?php } ?>
+</section>
 <?php
 include 'footer.php';
 ?>

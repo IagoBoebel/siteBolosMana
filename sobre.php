@@ -1,5 +1,5 @@
 <?php 
-$title = "Nossa História";
+$title = "Sobre";
 include 'header.php';
 ?>
 <section class="conteudo">

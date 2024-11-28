@@ -32,16 +32,13 @@
                     <a class="nav-link" href="produtos.php">Produtos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="nossa_historia.php">Nossa História</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" href="pedidos.php">Pedidos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="localizacao.php">Localização</a>
+                    <a class="nav-link" href="informacoes.php">Informações</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="contato.php">Contato</a>
+                    <a class="nav-link" href="sobre.php">Sobre</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="login.php">Entrar</a>
