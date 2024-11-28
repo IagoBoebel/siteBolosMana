@@ -2,7 +2,7 @@
 <section class="row">
     <section class="col-8 ">
     <h1>Inserir novo bolo</h1>
-    <form class="form" action="bolo_controller.php?acao=create" method="post">
+    <form class="form" action="controllers/bolo_controller.php?acao=create" method="post">
         <label class="form-label">Nome do Bolo:</label>
         <input type="text" class="form-control" placeholder="Digite o nome do bolo" name="nome_bolo" required>
         <br>

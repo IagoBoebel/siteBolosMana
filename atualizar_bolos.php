@@ -2,7 +2,7 @@
 <section class="row">
     <section class="col-8">
         <h1>Editar um bolo</h1>
-        <form class="form" action="bolo_controller.php?acao=update" method="post">
+        <form class="form" action="controllers/bolo_controller.php?acao=update" method="post">
             <label class="form-label">ID do Bolo:</label>
             <input type="text" class="form-control" placeholder="Digite o ID do bolo que deve ser editado" name="id_para_atualizar" required>
             <br>
@@ -21,4 +21,5 @@
         </form>
     </section>
 </section>
+
 

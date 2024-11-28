@@ -1,7 +1,9 @@
 <?php 
-$title = "Produtos";
+$title = "produtos";
 include 'header.php';
-//include 'produtos_controller.php'; // Arquivo que contém a conexão com o banco de dados
+require "bolo.php";
+require "bolo_service.php";
+require "conexao.php";
 ?>
 
 <section class="conteudo py-5">
@@ -10,30 +12,31 @@ include 'header.php';
         <div class="row">
             <?php
             // Consulta para buscar produtos
-            $query = "SELECT * FROM produtos";
-            $result = $conn->query($query);
-            
-            if ($result->num_rows > 0) {
-              while ($produto = $result->fetch_assoc()) {
-                   ?>
+            $bolos = new Bolo();
+            $conexao = new Conexao();
+            $boloService = new BoloService($conexao, $bolos);
+            $array_produtos = $boloService->recuperar();
+
+            if (!empty($array_produtos)) {
+                foreach($array_produtos as $produto) { 
+            ?>
                     <div class="col-md-4 mb-4">
                         <div class="card h-100">
-                            <img src="<?php echo $produto['imagem']; ?>" class="card-img-top" alt="<?php echo htmlspecialchars($produto['nome']); ?>">
+                            <img src="<?php echo htmlspecialchars($produto->imagem_bolo); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($produto->nome_bolo); ?>">
                             <div class="card-body">
-                                <h5 class="card-title"><?php echo htmlspecialchars($produto['nome']); ?></h5>
-                                <p class="card-text"><?php echo htmlspecialchars($produto['descricao']); ?></p>
-                                <p class="card-text"><strong>Preço:</strong> R$ <?php echo number_format($produto['preco'], 2, ',', '.'); ?></p>
+                                <h5 class="card-title"><?php echo htmlspecialchars($produto->nome_bolo); ?></h5>
+                                <p class="card-text"><?php echo htmlspecialchars($produto->descricao_bolo); ?></p>
+                                <p class="card-text"><strong>Preço:</strong> R$ <?php echo number_format($produto->preco_bolo, 2, ',', '.'); ?></p>
                             </div>
                         </div>
                     </div>
-                  <?php 
+            <?php 
                 }
-            } else {
-                echo "<p class='text-center'>Nenhum produto disponível no momento.</p>";
+            } else { 
+            ?>
+                <p class="text-center">Nenhum produto disponível no momento.</p>
+            <?php 
             }
-            
-            // Fecha a conexão
-            $conn->close();
             ?>
         </div>
     </div>

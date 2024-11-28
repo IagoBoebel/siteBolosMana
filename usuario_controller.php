@@ -16,7 +16,7 @@ if(isset($_GET['action']) && $_GET['action'] == 'create') {
         $usuario->__set('ruaUsuario', $_POST['ruaUsuario']);
         $usuario->__set('numeroCasaUsuario', $_POST['numeroCasaUsuario']);
         $usuario->__set('CEPUsuario', $_POST['CEPUsuario']);
-        
+        $usuario->__set('nivelAcesso', $_POST['tipo_acesso']);        
         // Conecta e insere os dados
         $conexao = new Conexao();
         $usuarioService = new UsuarioService($conexao, $usuario);

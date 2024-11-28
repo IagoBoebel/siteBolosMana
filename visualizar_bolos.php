@@ -35,9 +35,5 @@ if ($acao == 'read') {
                 </td>
             </tr>";
     }
-    echo '</tbody>
-        </table>
-        <a href="inserir_bolo.php" class="btn btn-success">Adicionar Novo Bolo</a>
-    </div>';
 }
 ?>

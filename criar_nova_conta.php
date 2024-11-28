@@ -18,7 +18,7 @@ include 'header.php';
     <!-- Telefone -->
     <div class="mb-3">
         <label for="telefoneUsuario" class="form-label">Telefone:</label>
-        <input id="telefoneUsuario" type="tel" name="telefoneUsuario" placeholder="(XX) XXXXX-XXXX" class="form-control" required>
+        <input id="telefoneUsuario" type="tel" name="telefoneUsuario" placeholder="Digite o seu telefone XXXXXXXXXXX" class="form-control" required>
     </div>
 
     <!-- E-mail -->
@@ -56,6 +56,17 @@ include 'header.php';
         <label for="CEPUsuario" class="form-label">CEP:</label>
         <input id="CEPUsuario" type="text" name="CEPUsuario" placeholder="Digite seu CEP" class="form-control">
     </div>
+
+    <div class="mb-3">
+        <label for="tipo_conta" class="form-label">Tipo de conta:</label>
+        <select id="tipo_conta" name="tipo_acesso" class="form-select" required>
+            <option value="">Selecione o Tipo de Conta</option>
+            <option value="1">Administrador</option>
+            <option value="2">Usuário</option>
+        </select>
+    </div>
+
+
 
     <!-- Botão de envio -->
     <div class="d-grid">

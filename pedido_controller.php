@@ -16,7 +16,6 @@ if (isset($_GET['pedido']) && $_GET['pedido'] === 'create') {
         $pedido->__set('entregaPedido', $_POST['tipo_entrega']);
         $pedido->__set('idEntregador', $idEntregador);
         $pedido->__set('cpfCliente', $_POST['CPF']);
-        $pedido->__set('valorPedido', 100);
 
         $conexao = new Conexao();
         $pedidoService = new PedidoService($conexao, $pedido);
@@ -37,6 +36,7 @@ if (isset($_GET['pedido']) && $_GET['pedido'] === 'create') {
         $retirada = '';
         $nomeCliente = '';
         $boloQuantidades = []; // Array para armazenar bolos e suas quantidades
+        $valorTotal;
 
         foreach($pedidoAtual as $pedido) {
             // Definindo o nome do cliente e a retirada (esse dado deve ser o mesmo para todos os itens do pedido)
@@ -51,6 +51,7 @@ if (isset($_GET['pedido']) && $_GET['pedido'] === 'create') {
             } else {
                 $boloQuantidades[$pedido['nome_bolo']] = $pedido['quantidadePedido'];
             }
+            $valorTotal += $pedido['valor_pedido'];
         }
 
         // HTML para exibição do pedido
@@ -59,31 +60,53 @@ if (isset($_GET['pedido']) && $_GET['pedido'] === 'create') {
             <h1 style="text-align: left">Aqui está o resumo de seu pedido:</h1>
             <section class="row">
                 <!-- Informações do Pedido -->
-                <div class="mb-3">
+    
                     <p><strong>Nome do Cliente:</strong> ' . $nomeCliente . '</p>
                     <p><strong>Telefone:</strong> ' . $pedido['telefone_cliente'] . '</p>
                     <p><strong>Endereço:</strong> ' . $pedido['rua'] . ', ' . $pedido['numero_casa'] . ' - ' . $pedido['CEP'] . '</p>
-                    <p><strong>Valor do Pedido:</strong> R$ ' . number_format($pedido['valor_pedido'], 2, ',', '.') . '</p>';
+                    <p><strong>Valor do Pedido:</strong> R$ ' . number_format($valorTotal, 2, ',', '.') . '</p>';
 
         // Exibindo a lista de bolos e suas quantidades
-        echo '<p><strong>Bolos:</strong> ';
         $boloList = [];
         foreach ($boloQuantidades as $bolo => $quantidade) {
-            $boloList[] = $bolo . " " . $quantidade;
+            $boloList[] = "<p><strong>" . $bolo . ": </strong>" . $quantidade . "</p><br>";
         }
-        echo implode(", ", $boloList) . '</p>';
+        echo implode($boloList);
 
         echo '
                     <p><strong>Retirada:</strong> ' . $retirada . '</p>
-                </div>
+            
             </section>
         </div>
         ';
+        echo '
+    <form method="GET" action="pedido_controller.php?pedido=delete">
+        <input type="hidden" name="pedido" value="delete">
+        <input type="hidden" name="id_pedido" value="">
+        <button type="submit" class="btn btn-danger mb-5">Excluir Pedido</button>
+    </form>
+';
+
     } catch (Exception $e) {
         // Redireciona em caso de erro
         header("Location: pedidos.php?status=nao");
     }
+}else if (isset($_GET['pedido']) && $_GET['pedido'] === 'delete') {
+    try {
+        $pedido = new Pedido();
+        $conexao = new Conexao();
+        $pedidoService = new PedidoService($conexao, $pedido);
+        
+        // Obtendo o ID do pedido a ser excluído
+        $idExclusao = $_SESSION['id'];
+        $pedidoService->excluirPedidosPorCliente($idExclusao);
+        
+        header("Location: pedidos.php?status=deletado");
+    } catch (Exception $e) {
+        header("Location: pedidos.php?status=erro");
+    }
 }
+
 
 
 

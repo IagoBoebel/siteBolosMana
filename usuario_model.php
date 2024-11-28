@@ -9,7 +9,7 @@
         private $ruaUsuario;
         private $numeroCasaUsuario;
         private $CEPUsuario;
-        private $nivelAcesso = 2;
+        private $nivelAcesso;
         
         public function __get($atributo) {
             return $this->$atributo;

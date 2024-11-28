@@ -1,6 +1,7 @@
 <?php 
 $title = "Pedidos";
 include 'header.php';
+require_once "validar_acesso.php";
 include 'pedido_service.php';
 include 'conexao.php';
 include 'pedido_model.php';
@@ -33,9 +34,24 @@ function botaoAcompanharPedido() {
         </div>
     </div>
 </div>
-<section id="pdido" class="container">
 
-</section>
+<section id="pdido" class="container">
+    <?php if ($_GET['status'] === 'deletado') {   ?>
+    
+        <div class='alert alert-success'>Pedido excluído com sucesso!</div>
+   
+        <?php } ?> 
+    
+    
+    <?php if ($_GET['status'] === 'erro') {?>
+       
+        <div class='alert alert-danger'>Erro ao excluir o pedido.</div>
+    
+    <?php } ?>
+
+
+
+
          <!-- Mensagens de Sucesso ou Erro -->
          <?php if(isset($_GET['status']) && $_GET['status'] == 'sim') { ?>
                 <div class="text-success d-flex flex-column align-items-center bg-white p-4 border border-3 mb-4">
@@ -47,6 +63,7 @@ function botaoAcompanharPedido() {
                     <p class="justify-content-center">Erro ao realizar o pedido. Tente novamente.</p>
                 </div>
             <?php } ?>
+</section>
 </section>
 <?php
 include 'footer.php';

@@ -13,9 +13,10 @@ class UsuarioService {
     
     public function inserir() {
         try {
-            $query = "INSERT INTO cliente (cpf_cliente, CEP, email_cliente, nome_cliente, numero_casa, rua, senha_cliente, telefone_cliente)
-                        VALUES (:cpf, :cep, :email, :nome, :numero, :rua, :senha, :telefone);";
+            $query = "INSERT INTO cliente (cpf_cliente, CEP, email_cliente, nome_cliente, numero_casa, rua, senha_cliente, telefone_cliente, tipo_acesso)
+                        VALUES (:cpf, :cep, :email, :nome, :numero, :rua, :senha, :telefone, :tipo_acesso);";
             $stmt = $this->conexao->prepare($query);
+            $stmt->bindValue(':tipo_acesso', $this->usuario->__get('nivelAcesso')); 
             $stmt->bindValue(':cpf', $this->usuario->__get('CPFUsuario'));
             $stmt->bindValue(':cep', $this->usuario->__get('CEPUsuario'));
             $stmt->bindValue(':email', $this->usuario->__get('emailUsuario'));
