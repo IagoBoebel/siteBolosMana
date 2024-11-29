@@ -4,90 +4,116 @@
     margin: 0;
     box-sizing: border-box;
 }
+
 /* Configurando cor de plano de fundo do site */
 body {
     background-color: #AECBEA;
-    overflow-x: hidden;
+    overflow-x: hidden; /* Impede rolagem horizontal */
 }
+
 /* Configuração do fundo da capa e do tamanho */
 .capa {
     background-color: #0A2A43;
     width: 100%;
-    height: 200px;   
+    height: 200px;
 }
+
 /* Classe para o texto da capa */
 .capa h1 {
-    box-shadow: 0 4px 8px #00000033; /* Shadow box para criar um leve efeito de destaque */
-    color: saddlebrown;
-    font-size: 4em;
-    text-align: center;
+    box-shadow: 0 4px 8px #00000033; /* Efeito de sombra no texto */
+    color: saddlebrown; /* Cor do texto */
+    font-size: 4em; /* Tamanho da fonte */
+    text-align: center; /* Alinhamento centralizado */
 }
-/* Configurar texto secundario da capa */
+
+/* Configurar texto secundário da capa */
 .capa h2 {
-    text-align: center;
-    font-size: 1em;
-    color: saddlebrown;
-    margin-top: 2em;
+    text-align: center; /* Alinhamento centralizado */
+    font-size: 1em; /* Tamanho da fonte */
+    color: saddlebrown; /* Cor do texto */
+    margin-top: 2em; /* Margem superior */
 }
+
 /* Configurações sobre navegação */
 .navbar {
-    font-size: 1.5em;
+    font-size: 1.5em; /* Tamanho da fonte da navbar */
 }
+
+/* Estilo para links ao passar o mouse */
 nav a:hover {
-    background-color: #007bff;
+    background-color: #007bff; /* Cor de fundo ao passar o mouse */
 }
+
 nav a {
-    color:white !important;
+    color: white !important; /* Cor do link */
 }
+
+/* Estilo para a barra de navegação */
 .navegacao {
-    background-color: #1E4D6F;
-    padding: 0;
+    background-color: #1E4D6F; /* Cor de fundo */
+    padding: 0; /* Retira padding */
 }
-/* Configurações do texto principal dos conteudos do site */
-.conteudo h1{
-    margin: 40px 10px;
-    font-size: 2.6em;
-    text-align: center;
+
+/* Configurações do texto principal dos conteúdos do site */
+.conteudo h1 {
+    margin: 40px 10px; /* Margens do título */
+    font-size: 2.6em; /* Tamanho da fonte */
+    text-align: center; /* Alinhamento centralizado */
 }
-/* Configuração dos paragrafos dos conteudos */
+
+/* Configuração dos parágrafos dos conteúdos */
 .conteudo p {
-    font-size: 1.2em;
-    text-align: justify;
-    padding: 1em 1.5em;
-    text-indent: 30px;
+    font-size: 1.2em; /* Tamanho da fonte */
+    text-align: justify; /* Alinhamento justificado */
+    padding: 1em 1.5em; /* Padding interno */
+    text-indent: 30px; /* Recuo na primeira linha do parágrafo */
 }
-/* Leve configuração para ajustar margens do formulario */
+
+/* Leve configuração para ajustar margens do formulário */
 #formularioPedido {
-    margin: 10px;
+    margin: 10px; /* Margem do formulário */
 }
-/* Aumentar padding do conjunto de itens do formulario */
+
+/* Aumentar padding do conjunto de itens do formulário */
 .itemFormulario {
-    padding: 0.5em;
+    padding: 0.5em; /* Padding para os itens do formulário */
 }
+
+/* Estilo para o link ativo da navegação */
 .nav-link.active {
-    background-color: #007bff;
-    color: white;
+    background-color: #007bff; /* Cor de fundo para o link ativo */
+    color: white; /* Cor do texto do link ativo */
 }
+
+/* Estilo para os links da navegação */
 .nav-link {
-    padding: 0.3em 0.7em !important;
+    padding: 0.3em 0.7em !important; /* Padding dos links */
 }
+
+/* Estilo do rodapé */
 footer {
-    background-color: #0A2A43;
-    color: white;
+    background-color: #0A2A43; /* Cor de fundo */
+    color: white; /* Cor do texto */
 }
+
+/* Estilo para os ícones */
 .icon i {
-    padding: 1em 1em !important;
-}
-#botao_sair:hover {
-    background-color: transparent !important; /* Remove o fundo */
+    padding: 1em 1em !important; /* Padding para ícones */
 }
 
+/* Estilo do botão de sair */
+#botao_sair:hover {
+    background-color: transparent !important; /* Remove o fundo ao passar o mouse */
+}
+
+/* Estilo inicial do botão de sair */
 #botao_sair {
-    text-decoration: none; /* Remove sublinhado */
-    color: white; /* Define a cor inicial */
+    text-decoration: none; /* Remove o sublinhado */
+    color: white; /* Cor do texto */
 }
 
+/* Estilo do botão de sair ao passar o mouse */
 #botao_sair:hover {
-    color: white; /* Mantém a cor no hover */
-    text-decoration: none; /* Garante que não adicione sublinhado */
+    color: white; /* Mantém a cor */
+    text-decoration: none; /* Garante que o sublinhado não seja adicionado */
 }

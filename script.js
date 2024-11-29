@@ -1,24 +1,28 @@
+// Função para ativar o link correspondente ao título da página no menu
 function ativarLink() {
-    var pagAtual = document.title.toLowerCase();
-    var linksMenu = document.querySelectorAll(".nav-link");
+    var pagAtual = document.title.toLowerCase(); // Obtém o título da página atual
+    var linksMenu = document.querySelectorAll(".nav-link"); // Seleciona todos os links de navegação
 
+    // Itera sobre os links do menu
     linksMenu.forEach(function(link) {
-        var textoLink = link.textContent.toLowerCase();
+        var textoLink = link.textContent.toLowerCase(); // Obtém o texto de cada link
+        // Verifica se o texto do link é igual ao título da página atual
         if (pagAtual == textoLink) {
-            link.classList.add('active');
+            link.classList.add('active'); // Adiciona a classe 'active' ao link
         } else {
-            link.classList.remove('active')
+            link.classList.remove('active'); // Remove a classe 'active' do link
         }     
     });
 };
 
-
-// Função para criar alertas do CRUD de bolos
+// Função para criar alertas baseados na URL (para mostrar mensagens de sucesso/erro no CRUD)
 function alertasInsercao() {
-    const URL = decodeURIComponent(window.location.search);
+    const URL = decodeURIComponent(window.location.search); // Decodifica a URL para extrair parâmetros de query string
     let mensagem = "";
-    let destino = "administrador.php"; // Destino padrão
-    console.log("URL:", URL);
+    let destino = "administrador.php"; // Destino padrão após exibir o alerta
+    console.log("URL:", URL); // Log da URL para debug
+
+    // Verifica a URL e define a mensagem apropriada
     if (URL.includes("?inserido_com_sucesso")) {
         mensagem = "Bolo inserido com sucesso";
     } else if (URL.includes("?erro_inserir")) {
@@ -37,17 +41,20 @@ function alertasInsercao() {
         mensagem = "Não foi possível criar a conta, tente novamente.";
     }
 
+    // Se houver uma mensagem, exibe o alerta e redireciona
     if (mensagem) {
-        alert(mensagem);
-        window.location.href = destino;
+        alert(mensagem); // Exibe o alerta
+        window.location.href = destino; // Redireciona para o destino
     }
 }
+
+// Função chamada ao carregar a página, executando os alertas e ativando o link no menu
 window.onload = function() {
-    alertasInsercao();
-    ativarLink();
-    
+    alertasInsercao(); // Exibe os alertas baseados na URL
+    ativarLink(); // Ativa o link no menu correspondente à página
 }
 
+// Função para redirecionar o usuário para a página de criação de nova conta
 function criarNovaConta() {
-    window.location.href = "criar_nova_conta.php";
+    window.location.href = "criar_nova_conta.php"; // Redireciona para a página de criação de conta
 }

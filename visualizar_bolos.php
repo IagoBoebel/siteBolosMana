@@ -1,6 +1,7 @@
 <?php
 $acao = 'read';
 require 'bolo_controller.php';
+
 if ($acao == 'read') {
     echo '
     <div class="container">
@@ -18,6 +19,7 @@ if ($acao == 'read') {
                 </tr>
             </thead>
             <tbody>';
+
     foreach($bolos as $bolo) {
         echo "
             <tr>
