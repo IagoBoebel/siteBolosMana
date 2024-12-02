@@ -1,6 +1,7 @@
 Sistema de Gestão de Loja de Bolos - README
 
 Descrição
+Este projeto foi realizado para a disciplina de fundamentos da programação web da universidade PUC-PR para o curso análise e desenvolvimento de software.
 Este projeto é um sistema de gestão de vendas de bolos, onde clientes podem realizar pedidos e escolher entre diferentes tipos de bolos com diversas opções de entrega. A aplicação é composta por um backend PHP e utiliza um banco de dados MySQL para armazenar informações sobre os clientes, produtos (bolos), entregas, pedidos e produtos nos pedidos.
 
 O sistema oferece funcionalidades básicas de CRUD (Criar, Ler, Atualizar, Deletar) para os bolos, com possibilidade de visualização dos produtos e exclusão de registros.
